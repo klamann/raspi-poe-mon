@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "raspi-poe-mon"
+version = "0.1.0"
+description = "A controller for the display and fan of the Raspberry Pi Power Over Ethernet HAT (Type B), compatible with Raspberry Pi 3B+/4B"
+authors = ["Sebastian Straub <sstraub@posteo.de>"]
+license = "MIT License"
+packages = [
+    { include = "raspi_poe_mon", from = "src" },
+]
+include = ["src/raspi_poe_mon/res/*"]
+
+[tool.poetry.scripts]
+raspi-poe-mon = "raspi_poe_mon.main:app"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+typer = {extras = ["all"], version = "^0.7.0"}
+
+[tool.poetry.dev-dependencies]
+pre-commit = "^2.20"
+pytest = "^7.2"
+pytest-cov = "^4.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
