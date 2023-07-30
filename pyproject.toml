@@ -15,6 +15,7 @@ raspi-poe-mon = "raspi_poe_mon.main:app"
 [tool.poetry.dependencies]
 python = "^3.9"
 typer = {extras = ["all"], version = "^0.7.0"}
+luma-oled = "^3.12"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^7.0"
