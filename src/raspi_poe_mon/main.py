@@ -2,14 +2,14 @@ import logging
 
 import typer
 
-from raspi_poe_mon import __title__
-from raspi_poe_mon import __version__
+from raspi_poe_mon import __title__, __version__
 
 logger = logging.getLogger('raspi_poe_mon')
 
 app = typer.Typer(
     name='raspi_poe_mon',
-    help="A controller for the display and fan of the Raspberry Pi Power Over Ethernet HAT (Type B), compatible with Raspberry Pi 3B+/4B")
+    help="A controller for the display and fan of the Raspi PoE HAT (Type B)"
+)
 
 
 def version_callback(version: bool):
@@ -34,9 +34,8 @@ def main(config_file: str = ConfigOption, version: bool = VersionOption):
     This docstring is where you describe what your command line application does.
     Try running `python -m raspi_poe_mon --help` to see how this shows up in the command line.
     """
-    
+    logging.basicConfig(level=logging.INFO)
     logger.info("Looks like you're all set up. Let's get going!")
-    # TODO your journey starts here
 
 
 if __name__ == "__main__":
