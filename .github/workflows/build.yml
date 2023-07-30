@@ -31,3 +31,4 @@ jobs:
           sudo apt install python3 python3-pip
           pip install poetry
           poetry install
+          pytest
