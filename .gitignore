@@ -37,6 +37,7 @@ coverage.xml
 *.cover
 .hypothesis/
 .pytest_cache/
+.ruff_cache
 
 # Django stuff:
 *.log
@@ -64,8 +65,3 @@ venv*/
 .vscode/
 .idea/
 *.iws
-
-# project-specific stuff
-# exclude data from source control (but keep the folder)
-data/*
-!data/.gitkeep
