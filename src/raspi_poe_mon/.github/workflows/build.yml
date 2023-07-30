@@ -1,0 +1,33 @@
+name: build
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '*.md'
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - '*.md'
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: pguyot/arm-runner-action@v2
+      id: build_image
+      with:
+        base_image: raspios_lite_arm64:latest
+        cpu: cortex-a7
+        cpu_info: cpuinfo/raspberrypi_4b
+        commands: |
+          set -uex
+          uname -a
+          grep Model /proc/cpuinfo
+          sudo apt install python3 python3-pip
+          pip install poetry
+          poetry install
