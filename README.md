@@ -34,4 +34,4 @@ Sebastian Straub (sstraub [at] posteo.de)
 
 ## License
 
-This project is available under the terms of the [MIT License]((./LICENSE)).
+This project is available under the terms of the [MIT License](./LICENSE).
