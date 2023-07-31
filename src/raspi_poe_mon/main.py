@@ -3,10 +3,9 @@ import time
 
 import typer
 
-from raspi_poe_mon import __title__, __version__
+from raspi_poe_mon import __title__, __version__, util
 from raspi_poe_mon.ip import IpDisplay
 from raspi_poe_mon.poe_hat import PoeHat
-from raspi_poe_mon import util
 
 logger = logging.getLogger('raspi_poe_mon')
 
@@ -31,9 +30,9 @@ VersionOption = typer.Option(
 
 @app.command()
 def main(
-    config_file: str = ConfigOption, 
-    version: bool = VersionOption, 
-    fan_on_temp: float = 50, 
+    config_file: str = ConfigOption,
+    version: bool = VersionOption,
+    fan_on_temp: float = 50,
     fan_off_temp: float = 45,
     fps=1.0
 ):

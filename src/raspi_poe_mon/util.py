@@ -1,6 +1,6 @@
 import pkgutil
-from io import BytesIO
 import socket
+from io import BytesIO
 
 from PIL import ImageFont
 from PIL.ImageFont import FreeTypeFont
@@ -20,6 +20,6 @@ def get_ip_address() -> str:
 
 
 def get_cpu_temp() -> float:
-    with open('/sys/class/thermal/thermal_zone0/temp', 'rt') as fp:
+    with open('/sys/class/thermal/thermal_zone0/temp') as fp:
         temp = int(fp.read()) / 1000
     return temp
