@@ -4,9 +4,7 @@ version = "0.1.0"
 description = "A controller for the display and fan of the Raspberry Pi Power Over Ethernet HAT (Type B), compatible with Raspberry Pi 3B+/4B"
 authors = ["Sebastian Straub <sstraub@posteo.de>"]
 license = "MIT License"
-packages = [
-    { include = "raspi_poe_mon", from = "src" },
-]
+packages = [{ include = "raspi_poe_mon", from = "src" }]
 include = ["src/raspi_poe_mon/res/*"]
 
 [tool.poetry.scripts]
