@@ -1,28 +1,21 @@
-import pkgutil
-from io import BytesIO
 
-from PIL import ImageFont
 from PIL.ImageDraw import ImageDraw
-from PIL.ImageFont import FreeTypeFont
 
 from raspi_poe_mon.poe_hat import PoeHat
-
+from raspi_poe_mon import util
 
 
 class IpDisplay:
 
     def __init__(self, poe_hat: PoeHat) -> None:
         self.poe_hat = poe_hat
-        self.font_5px = load_font(size=5)
-        self.font_10px = load_font(size=10)
+        self.font_5px = util.load_font(size=5)
+        self.font_10px = util.load_font(size=10)
 
     def draw_frame(self):
+        ip = util.get_ip_address()
+        temp = util.get_cpu_temp()
         with self.poe_hat.draw() as draw:
             draw: ImageDraw
-            draw.rectangle(self.poe_hat.display.bounding_box, outline="white", fill="black")
-            draw.text((10, 10), "YOLO", fill="white", font=self.font_10px)
-
-
-def load_font(path='res/cg-pixel-4x5.otf', size=5, **kwargs) -> FreeTypeFont:
-    font_bin = pkgutil.get_data('raspi_poe_mon', path)
-    return ImageFont.truetype(BytesIO(font_bin), size=size, **kwargs)
+            draw.text((2,2), ip, font=self.font_10px, fill=1)
+            draw.text((2,16), f"{temp:.1f}'C", font=self.font_10px, fill=1)
