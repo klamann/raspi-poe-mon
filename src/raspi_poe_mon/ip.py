@@ -23,23 +23,36 @@ class IpDisplay:
 
         with self.poe_hat.draw() as draw:
             draw: ImageDraw
+
+            # format all the contents we want to print
             cpu_f, cpu_len = self.format_number(cpu, draw, self.font_8px)
             temp_f, temp_len = self.format_number(temp, draw, self.font_8px)
             ram_f, ram_len = self.format_number(ram.percent, draw, self.font_8px)
             disk_f, disk_len = self.format_number(disk.percent, draw, self.font_8px)
 
+            # top center: IP address
             ip_x = (128 - draw.textlength(ip, font=self.font_8px)) // 2
             draw.text((ip_x, 0), ip, font=self.font_8px, fill=1)
 
-            draw.text((0, 15), "CPU %", font=self.font_5px, fill=1)
-            draw.text((60 - cpu_len, 14), cpu_f, font=self.font_8px, fill=1)
-            draw.text((0, 26), "TEMP", font=self.font_5px, fill=1)
-            draw.text((60 - temp_len, 25), temp_f, font=self.font_8px, fill=1)
+            # middle left: CPU
+            draw.text((34 - cpu_len, 14), cpu_f, font=self.font_8px, fill=1)
+            draw.text((35, 14), '%', font=self.font_8px, fill=1)
+            draw.text((45, 15), "CPU", font=self.font_5px, fill=1)
 
-            draw.text((68, 15), "RAM %", font=self.font_5px, fill=1)
-            draw.text((128 - ram_len, 14), ram_f, font=self.font_8px, fill=1)
-            draw.text((68, 26), "DSK %", font=self.font_5px, fill=1)
-            draw.text((128 - disk_len, 25), disk_f, font=self.font_8px, fill=1)
+            # bottom left: RAM
+            draw.text((34 - ram_len, 25), ram_f, font=self.font_8px, fill=1)
+            draw.text((35, 25), '%', font=self.font_8px, fill=1)
+            draw.text((45, 26), "RAM", font=self.font_5px, fill=1)
+
+            # middle right: Temperature
+            draw.text((98 - temp_len, 14), temp_f, font=self.font_8px, fill=1)
+            draw.text((99, 13), '°', font=self.font_8px, fill=1)
+            draw.text((105, 14), 'C', font=self.font_8px, fill=1)
+
+            # bottom right: Disk usage
+            draw.text((98 - disk_len, 25), disk_f, font=self.font_8px, fill=1)
+            draw.text((99, 25), '%', font=self.font_8px, fill=1)
+            draw.text((109, 26), "DISK", font=self.font_5px, fill=1)
 
     @classmethod
     def format_number(cls, num: float, draw: ImageDraw, font: FreeTypeFont) -> tuple[str, int]:
