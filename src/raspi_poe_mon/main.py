@@ -1,11 +1,9 @@
 import logging
-import time
 
 import typer
 
-from raspi_poe_mon import __title__, __version__, util
-from raspi_poe_mon.ip import IpDisplay
-from raspi_poe_mon.poe_hat import PoeHat
+from raspi_poe_mon import __title__, __version__
+from raspi_poe_mon.ctrl import Controller
 
 logger = logging.getLogger('raspi_poe_mon')
 
@@ -34,31 +32,16 @@ def main(
     version: bool = VersionOption,
     fan_on_temp: float = 50,
     fan_off_temp: float = 45,
-    fps=1.0
+    frame_time: float = 2.0
 ):
     """
     a controller for the display and fan of the Raspberry Pi Power Over Ethernet HAT (Type B),
     compatible with Raspberry Pi 3B+/4B.
     """
-    logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s]: %(message)s")
+    logging.basicConfig(level=logging.DEBUG, format="%(asctime)s [%(levelname)s]: %(message)s")
     logger.info("Starting Raspi PoE HAT Monitor")
-    poe_hat = PoeHat()
-    display = IpDisplay(poe_hat)
-    try:
-        while True:
-            temp = util.get_cpu_temp()
-            if not poe_hat.is_fan_on() and temp > fan_on_temp:
-                logger.info(f"CPU temperature at {temp}, turning fan ON")
-                poe_hat.fan_on()
-            elif poe_hat.is_fan_on() and temp < fan_off_temp:
-                logger.info(f"CPU temperature at {temp}, turning fan OFF")
-                poe_hat.fan_off()
-            display.draw_frame()
-            time.sleep(1)
-    except KeyboardInterrupt:
-        pass
-    finally:
-        poe_hat.cleanup()
+    ctrl = Controller(fan_on_temp=fan_on_temp, fan_off_temp=fan_off_temp, frame_time=frame_time)
+    ctrl.main_loop()
 
 
 if __name__ == "__main__":
