@@ -30,15 +30,15 @@ VersionOption = typer.Option(
 def main(
     config_file: str = ConfigOption,
     version: bool = VersionOption,
-    fan_on_temp: float = 50,
-    fan_off_temp: float = 45,
+    fan_on_temp: float = 53,
+    fan_off_temp: float = 48,
     frame_time: float = 2.0
 ):
     """
     a controller for the display and fan of the Raspberry Pi Power Over Ethernet HAT (Type B),
     compatible with Raspberry Pi 3B+/4B.
     """
-    logging.basicConfig(level=logging.DEBUG, format="%(asctime)s [%(levelname)s]: %(message)s")
+    logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s]: %(message)s")
     logger.info("Starting Raspi PoE HAT Monitor")
     ctrl = Controller(fan_on_temp=fan_on_temp, fan_off_temp=fan_off_temp, frame_time=frame_time)
     ctrl.main_loop()
