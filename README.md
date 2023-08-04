@@ -2,7 +2,7 @@
 
 A controller for the display and fan of the Raspberry Pi Power Over Ethernet HAT (Type B), compatible with Raspberry Pi 3B+/4B.
 
-<screenshots be here>
+![](./docs/raspi-poe-hat-2k.webp)
 
 ## Features
 
