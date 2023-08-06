@@ -65,3 +65,6 @@ venv*/
 .vscode/
 .idea/
 *.iws
+
+# project specific
+data
