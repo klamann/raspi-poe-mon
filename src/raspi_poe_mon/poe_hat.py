@@ -15,9 +15,13 @@ class PoeHat:
         self.display: Optional[ssd1306] = None
         self.fan_state = False
 
-    def display_connect(self):
-        if self.display is None:
+    def display_connect(self, force=False):
+        if force or self.display is None:
             self.display = ssd1306(serial_interface=self.i2c_display, width=128, height=32)
+
+    def display_clear(self):
+        self.display_connect()
+        self.display.cleanup()
 
     def fan_on(self):
         self.i2c_fan.command(0xFE)
@@ -38,4 +42,4 @@ class PoeHat:
 
     def cleanup(self):
         self.fan_off()
-        self.display.cleanup()
+        self.display_clear()
