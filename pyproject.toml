@@ -20,6 +20,7 @@ psutil = "^5.9.5"
 [tool.poetry.group.test.dependencies]
 pytest = "^7.0"
 pytest-cov = "^4.0"
+luma-emulator = "^1.4.0"
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^3.0"

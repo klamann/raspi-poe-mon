@@ -18,7 +18,7 @@ and select `Interface Options` -> `I2C` -> `Yes`. You need to reboot your Raspi 
 
 Next we install required packages: Python and pip are needed; the remaining packages are dependencies of the Pillow graphics library.
 
-    sudo apt install python3 python3-pip libjpeg-dev zlib1g-dev libfreetype6-dev liblcms2-dev libopenjp2-7 libtiff5
+    sudo apt install python3 python3-pip libjpeg-dev zlib1g-dev libfreetype6-dev liblcms2-dev libopenjp2-7 libtiff5 libsdl2-image-2.0-0
 
 Now we are ready to install `raspi-poe-mon` from PyPI:
 
@@ -59,6 +59,9 @@ Before contributing code, please set up the pre-commit hooks to reduce errors an
 
 * You can [increase the I2C baudrate](https://luma-oled.readthedocs.io/en/latest/hardware.html#enabling-the-i2c-interface) from the default 100KHz to 400KHz by adding `dtparam=i2c_arm=on,i2c_baudrate=400000` to `/boot/config.txt` and then rebooting. This will allow you to run animations at a higher framerate.
 * If you try to install Python packages via pip on Raspberry Pi OS, you may get stuck due to [issues with gnome-keyring](https://github.com/pypa/pip/issues/7883). If this is the case, please `export PYTHON_KEYRING_BACKEND=keyring.backends.null.Keyring` and try again. You may want to add this to your `.profile` if the issue persists.
+
+/etc/systemd/system/poe-hat.service
+sudo systemctl daemon-reload
 
 ## Links
 
