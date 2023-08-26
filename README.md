@@ -4,9 +4,14 @@ A controller for the display and fan of the Raspberry Pi Power Over Ethernet HAT
 
 ![](./docs/raspi-poe-hat-2k.webp)
 
+The PoE HAT ([Waveshare SKU 18014](https://www.waveshare.com/wiki/PoE_HAT_(B))) allows you to deliver gigabit ethernet connectivity and power supply to your Raspi using a single connection (if you have a PoE capable switch/router). While PoE works without additional drivers, there is also a fan and a 128x32 pixel monochrome display on the HAT, both of which can be controlled with this software.
+
 ## Features
 
-* tbd
+* automatic fan control to reach your desired temperature target
+* show status information on the display: IP address, CPU usage, CPU temperature, RAM usage, disk usage.
+* manual fan control via CLI
+* show custom text via CLI (wip)
 
 ## Getting Started
 
@@ -30,6 +35,8 @@ You can now run `raspi-poe-mon` on your terminal to activate the display. Call `
 ## User Guide
 
 tbd
+
+    raspi-poe-mon --help
 
 ## Development
 
