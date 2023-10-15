@@ -27,7 +27,6 @@ Next we install required packages: Python and pip are needed; the remaining pack
 
 Now we are ready to install `raspi-poe-mon` from PyPI:
 
-    # TODO this is not yet available
     pip install raspi-poe-mon
 
 You can now run `raspi-poe-mon` on your terminal to activate the display. Call `raspi-poe-mon --help` to get usage instructions.
@@ -40,15 +39,11 @@ tbd
 
 ## Development
 
-To set up your local development environment, please make sure that [poetry](https://python-poetry.org/) is installed and updated
-
-    pip install --upgrade poetry
-
-Clone this repo and install the package with
+To set up your local development environment, please make sure that [poetry](https://python-poetry.org/docs/#installation) is installed and updated. Then clone this repo and install the package with
 
     poetry install
 
-This will create a new virtualenv in the `.venv` folder, install all dependencies and then the `raspi-poe-mon` package. You should now be able to access the CLI with `poetry run python -m raspi_poe_mon`.
+This will create a new virtualenv in the `.venv` folder, install all dependencies and then the `raspi-poe-mon` package. You should now be able to access the CLI with `poetry run raspi-poe-mon`.
 
 We use `pytest` as test framework:
 
@@ -66,9 +61,6 @@ Before contributing code, please set up the pre-commit hooks to reduce errors an
 
 * You can [increase the I2C baudrate](https://luma-oled.readthedocs.io/en/latest/hardware.html#enabling-the-i2c-interface) from the default 100KHz to 400KHz by adding `dtparam=i2c_arm=on,i2c_baudrate=400000` to `/boot/config.txt` and then rebooting. This will allow you to run animations at a higher framerate, but it is not required for the default status display.
 * If you try to install Python packages via pip on Raspberry Pi OS, you may get stuck due to [issues with gnome-keyring](https://github.com/pypa/pip/issues/7883). If this is the case, please `export PYTHON_KEYRING_BACKEND=keyring.backends.null.Keyring` and try again. You may want to add this to your `.profile` if the issue persists.
-
-/etc/systemd/system/poe-hat.service
-sudo systemctl daemon-reload
 
 ## Links
 
