@@ -1,0 +1,27 @@
+name: pypi-prod
+
+# will be triggered when a new release is published (draft releases are ignored)
+on:
+  release:
+    types: [ published ]
+
+jobs:
+  release:
+    name: Deploy on PyPI
+    runs-on: ubuntu-latest
+    steps:
+      # make use of python & poetry
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - name: Install Poetry
+        run: pip install poetry
+      # build wheel and sdist
+      - name: Build Wheel
+        run: poetry build
+      # publish on PyPI (productive environment)
+      - name: Publish Package to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN }}
