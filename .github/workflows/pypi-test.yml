@@ -13,7 +13,7 @@ jobs:
     name: Create Release and Deploy on TestPyPI
     runs-on: ubuntu-latest
     permissions:
-      deployments: write
+      contents: write
     steps:
       # make use of python & poetry
       - uses: actions/checkout@v3
