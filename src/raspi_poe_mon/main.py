@@ -79,7 +79,7 @@ def clear():
 @app.command()
 def text(content: str, mode: str):
     """
-    show some text of your own choosing on the display
+    show some text of your own choosing on the display (not available yet)
     """
     # text with different modes: center, marquee, ...?
     print("not yet implemented")
