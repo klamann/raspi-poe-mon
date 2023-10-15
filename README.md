@@ -1,5 +1,11 @@
 # Raspi PoE HAT Monitor
 
+[![build](https://github.com/klamann/raspi-poe-mon/actions/workflows/build.yml/badge.svg?branch=main&event=push)](https://github.com/klamann/raspi-poe-mon/actions/workflows/build.yml)
+[![PyPI](https://img.shields.io/pypi/v/raspi-poe-mon)](https://pypi.org/project/raspi-poe-mon/)
+[![PyPI - License](https://img.shields.io/pypi/l/raspi-poe-mon)](https://github.com/klamann/raspi-poe-mon/blob/main/LICENSE)
+![Raspi](https://img.shields.io/badge/Raspberry%20Pi-A22846?logo=Raspberry%20Pi&logoColor=white)
+![Python](https://img.shields.io/badge/python-3670A0?logo=python&logoColor=ffdd54)
+
 A controller for the display and fan of the Raspberry Pi Power Over Ethernet HAT (Type B), compatible with Raspberry Pi 3B+/4B.
 
 ![](https://raw.githubusercontent.com/klamann/raspi-poe-mon/main/docs/raspi-poe-hat-2k.webp)
