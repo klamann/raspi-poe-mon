@@ -21,8 +21,7 @@ jobs:
       - name: Build Wheel
         run: |
           poetry build
-          cd dist
-          echo "WHEEL=`ls *.whl`" >> $GITHUB_ENV
+          echo "WHEEL=`ls dist/*.whl`" >> $GITHUB_ENV
       # create a new draft release (so we only trigger the deployment pipeline after the draft has been published)
       - name: Create Release
         env:
