@@ -27,6 +27,7 @@ jobs:
         commands: |
           uname -a
           grep Model /proc/cpuinfo
+          df -h
           sudo apt-get install -y python3-dev python3-pip
           pip install poetry --break-system-packages
           poetry install
