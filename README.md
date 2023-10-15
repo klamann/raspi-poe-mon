@@ -2,7 +2,7 @@
 
 A controller for the display and fan of the Raspberry Pi Power Over Ethernet HAT (Type B), compatible with Raspberry Pi 3B+/4B.
 
-![](./docs/raspi-poe-hat-2k.webp)
+![](https://raw.githubusercontent.com/klamann/raspi-poe-mon/main/docs/raspi-poe-hat-2k.webp)
 
 The PoE HAT ([Waveshare SKU 18014](https://www.waveshare.com/wiki/PoE_HAT_(B))) allows you to deliver gigabit ethernet connectivity and power supply to your Raspi using a single connection (if you have a PoE capable switch/router). While PoE works without additional drivers, there is also a fan and a 128x32 pixel monochrome display on the HAT, both of which can be controlled with this software.
 
@@ -44,7 +44,7 @@ To set up your local development environment, please make sure that [poetry](htt
 
     pip install --upgrade poetry
 
-Then install the package with
+Clone this repo and install the package with
 
     poetry install
 
@@ -64,7 +64,7 @@ Before contributing code, please set up the pre-commit hooks to reduce errors an
 
 ## Tips & Tricks
 
-* You can [increase the I2C baudrate](https://luma-oled.readthedocs.io/en/latest/hardware.html#enabling-the-i2c-interface) from the default 100KHz to 400KHz by adding `dtparam=i2c_arm=on,i2c_baudrate=400000` to `/boot/config.txt` and then rebooting. This will allow you to run animations at a higher framerate.
+* You can [increase the I2C baudrate](https://luma-oled.readthedocs.io/en/latest/hardware.html#enabling-the-i2c-interface) from the default 100KHz to 400KHz by adding `dtparam=i2c_arm=on,i2c_baudrate=400000` to `/boot/config.txt` and then rebooting. This will allow you to run animations at a higher framerate, but it is not required for the default status display.
 * If you try to install Python packages via pip on Raspberry Pi OS, you may get stuck due to [issues with gnome-keyring](https://github.com/pypa/pip/issues/7883). If this is the case, please `export PYTHON_KEYRING_BACKEND=keyring.backends.null.Keyring` and try again. You may want to add this to your `.profile` if the issue persists.
 
 /etc/systemd/system/poe-hat.service
