@@ -1,0 +1,38 @@
+name: pypi-test
+
+on:
+  push:
+    tags:
+    - 'v*'
+
+jobs:
+  pypi-test:
+    name: Create Release and Deploy on TestPyPI
+    runs-on: ubuntu-latest
+    steps:
+      # make use of python & poetry
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - name: Install Poetry
+        run: pip install poetry
+      # build wheel and sdist
+      - name: Build Wheel
+        run: |
+          poetry build
+          cd dist
+          echo "WHEEL=`ls *.whl`" >> $GITHUB_ENV
+      # create a new draft release (so we only trigger the deployment pipeline after the draft has been published)
+      - name: Create Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" --draft
+          gh release upload "$GITHUB_REF_NAME" "${{ env.WHEEL }}"
+      # release on TestPyPI (for release on regular PyPI, see deploy.yml)
+      - name: Publish Package to TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_TEST_API_TOKEN }}
+          repository_url: https://test.pypi.org/legacy/
