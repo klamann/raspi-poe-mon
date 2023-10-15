@@ -15,11 +15,27 @@ The PoE HAT ([Waveshare SKU 18014](https://www.waveshare.com/wiki/PoE_HAT_(B))) 
 
 ## Getting Started
 
-The OLED display and fan controls of the PoE HAT are accessed through the I2C interface, which on Raspberry Pi OS is deactivated by default. To activate it, run
+If you are running the latest [Raspberry Pi OS](https://www.raspberrypi.com/software/), everything should already be set up the way we need it and you can run
+
+    pip install raspi-poe-mon --break-system-packages
+
+The scary `--break-system-packages` flag just tells Python that you want to install this package globally rather than in a virtualenv. I don't really agree with the framing here, I think it's really fine to install Python packages globally on your Raspi.
+
+After installation finished, you can call
+
+    raspi-poe-mon run
+
+and the OLED disply should show you some info. Learn more about the available options with `raspi-poe-mon --help`.
+
+### Install Guide
+
+If you want to install `raspi-poe-mon` on older Raspberry Pi OS or on a different OS, this section is for you.
+
+The OLED display and fan controls of the PoE HAT are accessed through the [I²C interface](https://de.wikipedia.org/wiki/I%C2%B2C), which may be deactivated by default on your Raspi. To activate it on Raspberry Pi OS, run
 
     sudo raspi-config
 
-and select `Interface Options` -> `I2C` -> `Yes`. You need to reboot your Raspi to apply the change.
+and select `Interface Options` -> `I2C` -> `Yes`. You may need to reboot your Raspi to apply the change.
 
 Next we install required packages: Python and pip are needed; the remaining packages are dependencies of the Pillow graphics library.
 
@@ -29,13 +45,49 @@ Now we are ready to install `raspi-poe-mon` from PyPI:
 
     pip install raspi-poe-mon
 
-You can now run `raspi-poe-mon` on your terminal to activate the display. Call `raspi-poe-mon --help` to get usage instructions.
+If you are using Python 3.11 or higher, you may be greeted by `error: externally-managed-environment`. You can install raspi-poe-mon in a virtual environment to avoid this message, but then you can only use the `raspi-poe-mon` CLI when you enable this virtualenv first. If you want to ignore this annoyance, you can just add the `--break-system-packages` flag and go on with your day.
+
+### Troubleshooting
+
+* the `raspi-poe-mon` command is not available after installation? Make sure that `$HOME/.local/bin` is on your `PATH`! On Raspi OS, this is already the case, but when this folder was just created, you might have to open a new terminal session first.
+* If you try to install Python packages via pip on Raspberry Pi OS, you may get stuck due to [issues with gnome-keyring](https://github.com/pypa/pip/issues/7883). If this is the case, please `export PYTHON_KEYRING_BACKEND=keyring.backends.null.Keyring` and try again. You may want to add this to your `.profile` if the issue persists.
+* `pip install raspi-poe-mon` is still hangig or really slow? I can confirm that sometimes, downloading packages from PyPI on Raspi OS can take quite a while and I have no idea why... Try `pip install raspi-poe-mon -vvv` to get some status info and let it do it's thing for a couple of minutes.
 
 ## User Guide
 
-tbd
+After installation, the `raspi-poe-mon` command should be available on your terminal. Get usage instructions with
 
     raspi-poe-mon --help
+
+To activate the display and fan controller, use
+
+    raspi-poe-mon run
+
+This will show live system information and control the fan on the PoE HAT based on chip temperature. Each command has its own help section that lists all avilable options, e.g. `raspi-poe-mon run --help`.
+
+The display and fan controller will only stay active as long as the process is running. To have it start automatically on boot and keep it running in the background, we can create a system service. On Raspi OS, create a new file `/etc/systemd/system/raspi-poe-mon.service` with this content:
+
+```
+[Unit]
+Description=Raspi PoE HAT Monitor
+After=network.target
+
+[Service]
+Environment=systemd=true
+ExecStart=/home/raspi/.local/bin/raspi-poe-mon
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target
+```
+
+You may have to adjust the path to the executable (find it with `which raspi-poe-mon`). Now you can start the service with
+
+    sudo systemctl daemon-reload
+    sudo service raspi-poe-mon start
+
+Enjoy!
 
 ## Development
 
@@ -60,7 +112,6 @@ Before contributing code, please set up the pre-commit hooks to reduce errors an
 ## Tips & Tricks
 
 * You can [increase the I2C baudrate](https://luma-oled.readthedocs.io/en/latest/hardware.html#enabling-the-i2c-interface) from the default 100KHz to 400KHz by adding `dtparam=i2c_arm=on,i2c_baudrate=400000` to `/boot/config.txt` and then rebooting. This will allow you to run animations at a higher framerate, but it is not required for the default status display.
-* If you try to install Python packages via pip on Raspberry Pi OS, you may get stuck due to [issues with gnome-keyring](https://github.com/pypa/pip/issues/7883). If this is the case, please `export PYTHON_KEYRING_BACKEND=keyring.backends.null.Keyring` and try again. You may want to add this to your `.profile` if the issue persists.
 
 ## Links
 
