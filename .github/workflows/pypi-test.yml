@@ -33,7 +33,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release create "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" --draft
-          gh release upload "$GITHUB_REF_NAME" "${{ env.WHEEL }}"
+          gh release upload "$GITHUB_REF_NAME" "${{ env.WHEEL }}" --clobber
       # release on TestPyPI (for release on regular PyPI, see deploy.yml)
       - name: Publish Package to TestPyPI
         uses: pypa/gh-action-pypi-publish@release/v1
