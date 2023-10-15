@@ -2,9 +2,6 @@ name: pypi-test
 
 on:
   push:
-    # TODO remove
-    branches:
-      - 'main'
     tags:
       - 'v*'
 
