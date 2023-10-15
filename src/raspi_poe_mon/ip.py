@@ -16,7 +16,7 @@ class IpDisplay:
 
     def draw_frame(self):
         ip = util.get_ip_address()
-        temp = psutil.sensors_temperatures()['cpu_thermal'][0].current
+        temp = util.get_cpu_temp()
         cpu = psutil.cpu_percent(interval=None)
         ram = psutil.virtual_memory()
         disk = psutil.disk_usage('/')

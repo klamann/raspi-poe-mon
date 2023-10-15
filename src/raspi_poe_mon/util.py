@@ -1,9 +1,13 @@
+import logging
 import pkgutil
 import socket
 from io import BytesIO
 
+import psutil
 from PIL import ImageFont
 from PIL.ImageFont import FreeTypeFont
+
+logger = logging.getLogger('raspi_poe_mon')
 
 
 def load_font(path='res/cg-pixel-4x5.otf', size=5, **kwargs) -> FreeTypeFont:
@@ -20,6 +24,8 @@ def get_ip_address() -> str:
 
 
 def get_cpu_temp() -> float:
-    with open('/sys/class/thermal/thermal_zone0/temp') as fp:
-        temp = int(fp.read()) / 1000
-    return temp
+    try:
+        return psutil.sensors_temperatures()['cpu_thermal'][0].current
+    except KeyError as e:
+        logger.warning(f"failed to read CPU temperature: {e}")
+        return -1
