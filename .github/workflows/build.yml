@@ -28,7 +28,10 @@ jobs:
           uname -a
           grep Model /proc/cpuinfo
           df -h
+          sudo apt-get update
           sudo apt-get install -y python3-dev python3-pip
+          sudo apt-get -y clean autoremove
           pip install poetry --break-system-packages
+          df -h
           poetry install
           poetry run pytest
