@@ -2,13 +2,18 @@ name: pypi-test
 
 on:
   push:
+    # TODO remove
+    branches:
+      - 'main'
     tags:
-    - 'v*'
+      - 'v*'
 
 jobs:
   pypi-test:
     name: Create Release and Deploy on TestPyPI
     runs-on: ubuntu-latest
+    permissions:
+      deployments: write
     steps:
       # make use of python & poetry
       - uses: actions/checkout@v3
