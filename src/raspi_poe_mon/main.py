@@ -41,15 +41,15 @@ def callback(version: bool = VersionOption):
 
 @app.command()
 def run(
-    fan_on_temp: float = 53,
-    fan_off_temp: float = 48,
+    fan_on_temp: float = 60,
+    fan_off_temp: float = 50,
     frame_time: float = 2.0
 ):
     """
     start the display and fan controller
     """
     logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s]: %(message)s")
-    logger.info("Starting Raspi PoE HAT Monitor")
+    logger.info(f"Starting Raspi PoE HAT Monitor, version {__version__}")
     ctrl = Controller(fan_on_temp=fan_on_temp, fan_off_temp=fan_off_temp, frame_time=frame_time)
     ctrl.main_loop()
 
