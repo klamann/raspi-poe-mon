@@ -69,7 +69,11 @@ To activate the display and fan controller, use
 
     raspi-poe-mon run
 
-This will show live system information and control the fan on the PoE HAT based on chip temperature. Each command has its own help section that lists all avilable options, e.g. `raspi-poe-mon run --help`.
+This will show live system information and control the fan on the PoE HAT based on chip temperature. Each command has its own help section that lists all avilable options, e.g. `raspi-poe-mon run --help`. This will tell you how to change the fan controller settings
+
+    raspi-poe-mon run --fan-off-temp 50 --fan-on-temp 60
+
+With this setting, the fan will turn on when the CPU reaches 60°C and turn off after it has cooled down to 50°C.
 
 The display and fan controller will only stay active as long as the process is running. To have it start automatically on boot and keep it running in the background, we can create a system service. On Raspi OS, create a new file `/etc/systemd/system/raspi-poe-mon.service` with this content:
 
@@ -79,8 +83,8 @@ Description=Raspi PoE HAT Monitor
 After=network.target
 
 [Service]
-Environment=systemd=true
-ExecStart=/home/raspi/.local/bin/raspi-poe-mon
+ExecStart=/home/raspi/.local/bin/raspi-poe-mon run --fan-off-temp 50 --fan-on-temp 60
+User=raspi
 Restart=always
 RestartSec=30
 
@@ -88,7 +92,7 @@ RestartSec=30
 WantedBy=multi-user.target
 ```
 
-You may have to adjust the path to the executable (find it with `which raspi-poe-mon`). Now you can start the service with
+You may have to change `User=` and adjust the path to the executable in `ExecStart=` (find it with `which raspi-poe-mon`). Here you can also change the fan control settings to your liking. Now you can start the service with
 
     sudo systemctl daemon-reload
     sudo service raspi-poe-mon start
