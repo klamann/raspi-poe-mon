@@ -39,9 +39,9 @@ If you want to install `raspi-poe-mon` on older Raspberry Pi OS or on a differen
 
 The OLED display and fan controls of the PoE HAT are accessed through the [I²C interface](https://de.wikipedia.org/wiki/I%C2%B2C), which may be deactivated by default on your Raspi. To activate it on Raspberry Pi OS, run
 
-    sudo raspi-config
+    sudo raspi-config nonint do_i2c 0
 
-and select `Interface Options` -> `I2C` -> `Yes`. You may need to reboot your Raspi to apply the change.
+or call `raspi-config` without params and use the menu (`Interface Options` -> `I2C` -> `Yes`). You may need to reboot your Raspi to apply the change.
 
 Next we install required packages: Python and pip are needed; the remaining packages are dependencies of the Pillow graphics library.
 
