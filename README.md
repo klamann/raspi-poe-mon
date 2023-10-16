@@ -92,9 +92,10 @@ RestartSec=30
 WantedBy=multi-user.target
 ```
 
-You may have to change `User=` and adjust the path to the executable in `ExecStart=` (find it with `which raspi-poe-mon`). Here you can also change the fan control settings to your liking. Now you can start the service with
+You may have to change `User=` and adjust the path to the executable in `ExecStart=` (find it with `which raspi-poe-mon`). Here you can also change the fan control settings to your liking. Now you can activate the service with
 
     sudo systemctl daemon-reload
+    sudo systemctl enable raspi-poe-mon
     sudo service raspi-poe-mon start
 
 Enjoy!
