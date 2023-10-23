@@ -31,7 +31,7 @@ After installation finished, you can call
 
     raspi-poe-mon run
 
-and the OLED disply should show you some info. Learn more about the available options with `raspi-poe-mon --help`.
+and the OLED disply should show you some info. Learn more about the available options with `raspi-poe-mon --help`. Each command has its own help section, e.g. `raspi-poe-mon run --help`.
 
 ### Install Guide
 
@@ -58,6 +58,7 @@ If you are using Python 3.11 or higher, you may be greeted by `error: externally
 * the `raspi-poe-mon` command is not available after installation? Make sure that `$HOME/.local/bin` is on your `PATH`! On Raspi OS, this is already the case, but when this folder was just created, you might have to open a new terminal session first.
 * If you try to install Python packages via pip on Raspberry Pi OS, you may get stuck due to [issues with gnome-keyring](https://github.com/pypa/pip/issues/7883). If this is the case, please `export PYTHON_KEYRING_BACKEND=keyring.backends.null.Keyring` and try again. You may want to add this to your `.profile` if the issue persists.
 * `pip install raspi-poe-mon` is still hangig or really slow? I can confirm that sometimes, downloading packages from PyPI on Raspi OS can take quite a while and I have no idea why... Try `pip install raspi-poe-mon -vvv` to get some status info and let it do it's thing for a couple of minutes.
+* the `pip` command is not available, even after installing `python3-pip`? try `pip3` instead.
 
 ## User Guide
 
