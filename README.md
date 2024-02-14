@@ -127,6 +127,8 @@ Before contributing code, please set up the pre-commit hooks to reduce errors an
 
 ## Links
 
+* [raspi-poe-mon](https://github.com/klamann/raspi-poe-mon) (this project) on GitHub
+* [RustBerry-PoE-Monitor](https://github.com/jackra1n/RustBerry-PoE-Monitor), another implementation in Rust
 * [Waveshare: PoE HAT (B)](https://www.waveshare.com/wiki/PoE_HAT_(B))
 * [luma.oled](https://github.com/rm-hull/luma.oled)
 * [pillow (PIL) dependencies](https://pillow.readthedocs.io/en/latest/installation.html#external-libraries)
