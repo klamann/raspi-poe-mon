@@ -5,6 +5,16 @@ description = "A controller for the display and fan of the Raspberry Pi Power Ov
 readme = "README.md"
 authors = ["Sebastian Straub <sstraub@posteo.de>"]
 license = "MIT License"
+homepage = "https://github.com/klamann/raspi-poe-mon"
+repository = "https://github.com/klamann/raspi-poe-mon"
+keywords = ["raspberry-pi", "oled-display", "monitoring", "waveshare", "power-over-ethernet"]
+classifiers = [
+    # Full list: https://pypi.python.org/pypi?%3Aaction=list_classifiers
+    "License :: OSI Approved :: MIT License",
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python :: 3",
+]
+
 packages = [{ include = "raspi_poe_mon", from = "src" }]
 include = ["src/raspi_poe_mon/res/*"]
 
