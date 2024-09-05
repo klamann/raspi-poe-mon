@@ -62,6 +62,10 @@ def run(
         float,
         typer.Option(help="update the display every n seconds")
     ] = 2.0,
+    verbose: Annotated[
+        bool,
+        typer.Option(help="log detailed status information")
+    ] = False,
 ):
     """
     activate the display and fan controller.
@@ -69,7 +73,8 @@ def run(
     the display will show system information (IP address, CPU, RAM, disk, temperature).
     the fan will turn on when CPU temperature gets above a certain threshold.
     """
-    logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s]: %(message)s")
+    log_level = logging.DEBUG if verbose else logging.INFO
+    logging.basicConfig(level=log_level, format="%(asctime)s [%(levelname)s]: %(message)s")
     logger.info(f"Starting Raspi PoE HAT Monitor, version {__version__}")
     ctrl = Controller(fan_on_temp=fan_on_temp, fan_off_temp=fan_off_temp, frame_time=frame_time)
     ctrl.main_loop()

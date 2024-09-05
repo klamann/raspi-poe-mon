@@ -1,9 +1,13 @@
+import logging
+
 import psutil
 from PIL.ImageDraw import ImageDraw
 from PIL.ImageFont import FreeTypeFont
 
 from raspi_poe_mon import util
 from raspi_poe_mon.poe_hat import PoeHat
+
+logger = logging.getLogger('raspi_poe_mon')
 
 
 class IpDisplay:
@@ -29,6 +33,7 @@ class IpDisplay:
             temp_f, temp_len = self.format_number(temp, draw, self.font_8px)
             ram_f, ram_len = self.format_number(ram.percent, draw, self.font_8px)
             disk_f, disk_len = self.format_number(disk.percent, draw, self.font_8px)
+            logger.debug(f"drawing new frame: {ip=}, {temp_f=}, {cpu_f=}, {ram_f=}, {disk_f=}")
 
             # top center: IP address
             ip_x = (128 - draw.textlength(ip, font=self.font_8px)) // 2
