@@ -33,7 +33,10 @@ class IpDisplay:
             temp_f, temp_len = self.format_number(temp, draw, self.font_8px)
             ram_f, ram_len = self.format_number(ram.percent, draw, self.font_8px)
             disk_f, disk_len = self.format_number(disk.percent, draw, self.font_8px)
-            logger.debug(f"drawing new frame: {ip=}, {temp_f=}, {cpu_f=}, {ram_f=}, {disk_f=}")
+            logger.debug(
+                f"drawing new frame: "
+                f"ip={ip}, temp={temp_f}, cpu={cpu_f}, ram={ram_f}, disk={disk_f}"
+            )
 
             # top center: IP address
             ip_x = (128 - draw.textlength(ip, font=self.font_8px)) // 2
