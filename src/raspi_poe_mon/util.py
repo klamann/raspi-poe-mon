@@ -26,6 +26,6 @@ def get_ip_address() -> str:
 def get_cpu_temp() -> float:
     try:
         return psutil.sensors_temperatures()['cpu_thermal'][0].current
-    except KeyError as e:
+    except (KeyError, AttributeError) as e:
         logger.warning(f"failed to read CPU temperature: {e}")
         return -1
