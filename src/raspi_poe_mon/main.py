@@ -1,5 +1,6 @@
 import logging
 from enum import Enum
+from typing import Annotated, Optional
 
 import typer
 
@@ -11,15 +12,10 @@ logger = logging.getLogger('raspi_poe_mon')
 app = typer.Typer(name='raspi-poe-mon')
 
 
-def version_callback(version: bool):
-    if version:
-        typer.echo(f"{__title__} {__version__}")
+def version_callback(value: bool):
+    if value:
+        print(f"{__title__} {__version__}")
         raise typer.Exit()
-
-
-VersionOption = typer.Option(
-    None, '-v', '--version', callback=version_callback, is_eager=True,
-    help="print the program version and exit")
 
 
 class Switch(str, Enum):
@@ -27,26 +23,51 @@ class Switch(str, Enum):
     on = "on"
 
 
-@app.callback(no_args_is_help=True)
-def callback(version: bool = VersionOption):
+@app.callback(
+    no_args_is_help=True,
+    context_settings={"help_option_names": ["-h", "--help"]}
+)
+def callback(
+    version: Annotated[
+        Optional[bool], typer.Option(
+            '--version',
+            '-v',
+            callback=version_callback,
+            is_eager=True,
+            help="print the program version and exit"
+        )
+    ] = None
+):
     """
     a controller for the display and fan of the Raspberry Pi Power Over Ethernet HAT (Type B),
     compatible with Raspberry Pi 3B+/4B.
 
     Use the `run` command to show resource information on the display and control the fan based
     on the temperature of your Raspi. Also, there are other commands to control fan and display
-    directly.
+    directly. Check the help for each sub-command to learn more, e.g. `raspi-poe-mon run --help`
     """
 
 
 @app.command()
 def run(
-    fan_on_temp: float = 60,
-    fan_off_temp: float = 50,
-    frame_time: float = 2.0
+    fan_on_temp: Annotated[
+        float,
+        typer.Option(help="turn on the fan when CPU temperature rises above this value (in °C)")
+    ] = 60,
+    fan_off_temp: Annotated[
+        float,
+        typer.Option(help="turn off the fan when CPU temperature drops below this value (in °C)")
+    ] = 50,
+    frame_time: Annotated[
+        float,
+        typer.Option(help="update the display every n seconds")
+    ] = 2.0,
 ):
     """
-    start the display and fan controller
+    activate the display and fan controller.
+
+    the display will show system information (IP address, CPU, RAM, disk, temperature).
+    the fan will turn on when CPU temperature gets above a certain threshold.
     """
     logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s]: %(message)s")
     logger.info(f"Starting Raspi PoE HAT Monitor, version {__version__}")
@@ -55,7 +76,11 @@ def run(
 
 
 @app.command()
-def fan(switch: Switch):
+def fan(
+    switch: Annotated[
+        Switch, typer.Argument(case_sensitive=False, help="turn the fan OFF or ON")
+    ]
+):
     """
     control the fan of the PoE HAT; no speed control, just on and off
     """
