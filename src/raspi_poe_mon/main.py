@@ -70,6 +70,10 @@ def run(
         bool,
         typer.Option(help="dry run - simulate commands without accessing the PoE HAT")
     ] = False,
+    profiling: Annotated[
+        bool,
+        typer.Option(help="log profiling information, very verbose")
+    ] = False,
 ):
     """
     activate the display and fan controller.
@@ -84,7 +88,8 @@ def run(
         fan_on_temp=fan_on_temp,
         fan_off_temp=fan_off_temp,
         frame_time=frame_time,
-        dry_run=dry
+        dry_run=dry,
+        profiling=profiling,
     )
     ctrl.main_loop()
 

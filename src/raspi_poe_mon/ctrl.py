@@ -1,6 +1,7 @@
 import logging
 import signal
 import time
+import tracemalloc
 
 from raspi_poe_mon import util
 from raspi_poe_mon.ip import IpDisplay
@@ -11,21 +12,34 @@ logger = logging.getLogger('raspi_poe_mon')
 
 class Controller:
 
-    def __init__(self, fan_on_temp=50.0, fan_off_temp=45.0, frame_time=1.0, dry_run=False):
+    def __init__(
+        self,
+        fan_on_temp=60.0,
+        fan_off_temp=50.0,
+        frame_time=2.0,
+        dry_run=False,
+        profiling=False,
+    ):
         self.fan_on_temp = fan_on_temp
         self.fan_off_temp = fan_off_temp
         self.frame_time = frame_time
+        self.profiling = profiling
         self.poe_hat = PoeHat(dry_run=dry_run)
         self.display = IpDisplay(self.poe_hat)
+        self._frame_counter = 0
         self._terminate = False
         self.add_signal_handlers()
+        self.profiling_setup()
 
     def main_loop(self):
         try:
             while not self._terminate:
                 frame_start = time.time()
+                self.before_frame()
                 self.update_fan()
                 self.display.draw_frame()
+                self.after_frame()
+                self._frame_counter += 1
                 if self._terminate:
                     break
                 sleep_time = self.frame_time - (time.time() - frame_start)
@@ -57,3 +71,39 @@ class Controller:
 
     def terminate(self, *args):
         self._terminate = True
+
+    def profiling_setup(self):
+        if self.profiling:
+            tracemalloc.start()
+            self._last_snapshot = tracemalloc.take_snapshot()
+            self._last_snapshot_time = 0
+
+    def before_frame(self):
+        pass
+
+    def after_frame(self):
+        # when profiling is active, print stats
+        if (
+            self.profiling
+            and self._frame_counter > 0
+            and (time.time() - self._last_snapshot_time) > 20
+        ):
+            current, peak = tracemalloc.get_traced_memory()
+            tracer_mem = tracemalloc.get_tracemalloc_memory()
+            snapshot = tracemalloc.take_snapshot()
+            snapshot = snapshot.filter_traces((
+                tracemalloc.Filter(False, tracemalloc.__file__),
+            ))
+            top_abs = snapshot.statistics('filename')
+            top_diff = snapshot.compare_to(self._last_snapshot, 'lineno')
+
+            top_abs_log = '\n'.join(str(stat) for stat in top_abs[:5])
+            top_diff_log = '\n'.join(str(stat) for stat in top_diff[:5])
+            logger.info(
+                f"memory usage: {current / 1024:.2f} kb (current), {peak / 1024:.2f} kb (peak), "
+                f"{(current - tracer_mem) / 1024:.2f} kb (without tracer)."
+                f"\nTop 5 usage (absolute):\n{top_abs_log}"
+                f"\nTop 5 usage (diff since last):\n{top_diff_log}\n"
+            )
+            self._last_snapshot = snapshot
+            self._last_snapshot_time = time.time()
