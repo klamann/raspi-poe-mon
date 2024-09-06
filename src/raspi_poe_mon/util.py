@@ -1,6 +1,7 @@
 import logging
 import pkgutil
 import socket
+import warnings
 from io import BytesIO
 
 import psutil
@@ -27,5 +28,5 @@ def get_cpu_temp() -> float:
     try:
         return psutil.sensors_temperatures()['cpu_thermal'][0].current
     except (KeyError, AttributeError) as e:
-        logger.warning(f"failed to read CPU temperature: {e}")
+        warnings.warn(f"failed to read CPU temperature: {e}", RuntimeWarning)
         return -1
