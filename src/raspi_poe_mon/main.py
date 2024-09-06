@@ -66,6 +66,10 @@ def run(
         bool,
         typer.Option(help="log detailed status information")
     ] = False,
+    dry: Annotated[
+        bool,
+        typer.Option(help="dry run - simulate commands without accessing the PoE HAT")
+    ] = False,
 ):
     """
     activate the display and fan controller.
@@ -76,7 +80,12 @@ def run(
     log_level = logging.DEBUG if verbose else logging.INFO
     logging.basicConfig(level=log_level, format="%(asctime)s [%(levelname)s]: %(message)s")
     logger.info(f"Starting Raspi PoE HAT Monitor, version {__version__}")
-    ctrl = Controller(fan_on_temp=fan_on_temp, fan_off_temp=fan_off_temp, frame_time=frame_time)
+    ctrl = Controller(
+        fan_on_temp=fan_on_temp,
+        fan_off_temp=fan_off_temp,
+        frame_time=frame_time,
+        dry_run=dry
+    )
     ctrl.main_loop()
 
 

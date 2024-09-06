@@ -1,29 +1,34 @@
 from contextlib import contextmanager
 from typing import Optional
 
-from luma.core.interface.serial import i2c
-from luma.core.render import canvas
-from luma.oled.device import ssd1306
 from PIL.ImageDraw import ImageDraw
+from luma.core import render
+from luma.core.interface import serial
+from luma.oled import device
+
+from raspi_poe_mon import mock
 
 
 class PoeHat:
 
-    def __init__(self) -> None:
-        self.i2c_fan: Optional[i2c] = None
-        self.i2c_display: Optional[i2c] = None
-        self.display: Optional[ssd1306] = None
+    def __init__(self, dry_run=False) -> None:
+        self.dry_run = dry_run
+        self.i2c_fan: Optional[serial.i2c] = None
+        self.i2c_display: Optional[serial.i2c] = None
+        self.display: Optional[device.ssd1306] = None
         self.fan_state = False
+        if self.dry_run:
+            mock.monkeypatch()
 
     def fan_connect(self, force=False):
         if force or self.i2c_fan is None:
-            self.i2c_fan = i2c(port=1, address=0x20)
+            self.i2c_fan = serial.i2c(port=1, address=0x20)
 
     def display_connect(self, force=False):
         if force or self.i2c_display is None:
-            self.i2c_display = i2c(port=1, address=0x3C)
+            self.i2c_display = serial.i2c(port=1, address=0x3C)
         if force or self.display is None:
-            self.display = ssd1306(serial_interface=self.i2c_display, width=128, height=32)
+            self.display = device.ssd1306(serial_interface=self.i2c_display, width=128, height=32)
 
     def display_clear(self):
         self.display_connect()
@@ -45,7 +50,7 @@ class PoeHat:
     @contextmanager
     def draw(self) -> ImageDraw:
         self.display_connect()
-        with canvas(self.display) as draw:
+        with render.canvas(self.display) as draw:
             yield draw
 
     def cleanup(self):
