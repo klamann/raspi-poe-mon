@@ -1,10 +1,10 @@
 from contextlib import contextmanager
 from typing import Optional
 
-from PIL.ImageDraw import ImageDraw
 from luma.core import render
 from luma.core.interface import serial
 from luma.oled import device
+from PIL.ImageDraw import ImageDraw
 
 from raspi_poe_mon import mock
 

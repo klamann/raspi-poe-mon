@@ -49,7 +49,10 @@ class MockCanvas(render.canvas):
         super().__init__(*args, **kwargs)
 
     def __exit__(self, type, value, traceback):
-        if logger.isEnabledFor(logging.DEBUG) and (time.time() - self.last_print) > self.print_delay:
+        if (
+            logger.isEnabledFor(logging.DEBUG)
+            and (time.time() - self.last_print) > self.print_delay
+        ):
             ascii_image = image_to_ascii(self.image)
             logger.debug(f"rendered image (next log in {self.print_delay}s):\n" + ascii_image)
             MockCanvas.last_print = time.time()
