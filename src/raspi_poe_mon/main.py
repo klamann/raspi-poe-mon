@@ -62,6 +62,10 @@ def run(
         float,
         typer.Option(help="update the display every n seconds")
     ] = 2.0,
+    brightness: Annotated[
+        int,
+        typer.Option(min=0, max=100, help="brightness level of the display in percent")
+    ] = 50,
     verbose: Annotated[
         bool,
         typer.Option(help="log detailed status information")
@@ -88,6 +92,7 @@ def run(
         fan_on_temp=fan_on_temp,
         fan_off_temp=fan_off_temp,
         frame_time=frame_time,
+        brightness=brightness,
         dry_run=dry,
         profiling=profiling,
     )

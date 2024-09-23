@@ -17,6 +17,7 @@ class Controller:
         fan_on_temp=60.0,
         fan_off_temp=50.0,
         frame_time=2.0,
+        brightness=100,
         dry_run=False,
         profiling=False,
     ):
@@ -24,7 +25,7 @@ class Controller:
         self.fan_off_temp = fan_off_temp
         self.frame_time = frame_time
         self.profiling = profiling
-        self.poe_hat = PoeHat(dry_run=dry_run)
+        self.poe_hat = PoeHat(dry_run=dry_run, brightness=brightness)
         self.display = IpDisplay(self.poe_hat)
         self._frame_counter = 0
         self._terminate = False

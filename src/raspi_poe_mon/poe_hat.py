@@ -11,8 +11,9 @@ from raspi_poe_mon import mock
 
 class PoeHat:
 
-    def __init__(self, dry_run=False) -> None:
+    def __init__(self, dry_run=False, brightness=100) -> None:
         self.dry_run = dry_run
+        self.brightness = brightness
         self.i2c_fan: Optional[serial.i2c] = None
         self.i2c_display: Optional[serial.i2c] = None
         self.display: Optional[device.ssd1306] = None
@@ -29,6 +30,7 @@ class PoeHat:
             self.i2c_display = serial.i2c(port=1, address=0x3C)
         if force or self.display is None:
             self.display = device.ssd1306(serial_interface=self.i2c_display, width=128, height=32)
+            self.display.contrast(int(255 * self.brightness / 100))
 
     def display_clear(self):
         self.display_connect()
