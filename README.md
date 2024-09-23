@@ -25,7 +25,7 @@ If you are running the latest [Raspberry Pi OS](https://www.raspberrypi.com/soft
 
     pip install raspi-poe-mon --break-system-packages
 
-The scary `--break-system-packages` flag just tells Python that you want to install this package globally rather than in a virtualenv. I don't really agree with the framing here, I think it's really fine to install Python packages globally on your Raspi.
+The scary `--break-system-packages` flag just tells Python that you want to install this package globally rather than in a virtualenv. I don't agree with the framing here, in my opinion it's fine to install Python packages globally on your Raspi.
 
 After installation finished, you can call
 
@@ -72,9 +72,11 @@ To activate the display and fan controller, use
 
 This will show live system information and control the fan on the PoE HAT based on chip temperature. Each command has its own help section that lists all avilable options, e.g. `raspi-poe-mon run --help`. This will tell you how to change the fan controller settings
 
-    raspi-poe-mon run --fan-off-temp 50 --fan-on-temp 60
+    raspi-poe-mon run --fan-off-temp 50 --fan-on-temp 60 --brightness 80
 
-With this setting, the fan will turn on when the CPU reaches 60°C and turn off after it has cooled down to 50°C.
+With this setting, the fan will turn on when the CPU reaches 60°C and turn off after it has cooled down to 50°C. The display's brightness level is set to 80%.
+
+### Start on Boot
 
 The display and fan controller will only stay active as long as the process is running. To have it start automatically on boot and keep it running in the background, we can create a system service. On Raspi OS, create a new file `/etc/systemd/system/raspi-poe-mon.service` with this content:
 
@@ -100,6 +102,100 @@ You may have to change `User=` and adjust the path to the executable in `ExecSta
     sudo service raspi-poe-mon start
 
 Enjoy!
+
+### Command Line Options
+
+**Usage**:
+
+```console
+$ raspi-poe-mon [OPTIONS] COMMAND [ARGS]...
+```
+
+**Options**:
+
+* `-v, --version`: print the program version and exit
+* `--install-completion`: Install completion for the current shell.
+* `--show-completion`: Show completion for the current shell, to copy it or customize the installation.
+* `--help`: Show this message and exit.
+
+**Commands**:
+
+* `display`: turn the display of the PoE HAT on or off...
+* `fan`: control the fan of the PoE HAT; no speed...
+* `run`: activate the display and fan controller.
+* `text`: show some text of your own choosing on the...
+
+#### `raspi-poe-mon run`
+
+activate the display and fan controller.
+
+the display will show system information (IP address, CPU, RAM, disk, temperature).
+the fan will turn on when CPU temperature gets above a certain threshold.
+
+**Usage**:
+
+```console
+$ raspi-poe-mon run [OPTIONS]
+```
+
+**Options**:
+
+* `--fan-on-temp FLOAT`: turn on the fan when CPU temperature rises above this value (in °C)  [default: 60]
+* `--fan-off-temp FLOAT`: turn off the fan when CPU temperature drops below this value (in °C)  [default: 50]
+* `--frame-time FLOAT`: show a new frame on the display every n seconds (excluding blank time)  [default: 2.0]
+* `--blank-time FLOAT`: bank time (seconds) between frames where the display is turned off  [default: 0.0]
+* `--brightness INTEGER RANGE`: brightness level of the display in percent  [default: 50; 0<=x<=100]
+* `--timeout FLOAT RANGE`: terminate after n seconds; 0 means run until interrupted  [default: 0.0; x>=0]
+* `--display / --no-display`: show system information on the display  [default: display]
+* `--fan / --no-fan`: control fan speed based on temperature  [default: fan]
+* `--verbose`: log detailed status information
+* `--dry`: dry run - simulate commands without accessing the PoE HAT
+* `--profiling`: log profiling information, very verbose
+* `--help`: Show this message and exit.
+
+#### `raspi-poe-mon display`
+
+turn the display of the PoE HAT on or off (on means all white, useful to detect pixel failures)
+
+turning the display OFF with this command should usually not be necessary, since raspi-poe-mon
+will always turn off the display when it terminates. But if your display is stuck in the 'on'
+state for some reason, you can explicitly turn it off with this command.
+
+turning the display ON will not show any information, but it will light up all pixels, which
+can be useful to detect pixel failures. Unfortunately, pixel burn-in is a known issue with
+these cheap OLED displays.
+
+**Usage**:
+
+```console
+$ raspi-poe-mon display [OPTIONS] SWITCH:{off|on}
+```
+
+**Arguments**:
+
+* `SWITCH:{off|on}`: turn the display OFF or ON  [required]
+
+**Options**:
+
+* `--help`: Show this message and exit.
+
+#### `raspi-poe-mon fan`
+
+control the fan of the PoE HAT; no speed control, just on and off
+
+**Usage**:
+
+```console
+$ raspi-poe-mon fan [OPTIONS] SWITCH:{off|on}
+```
+
+**Arguments**:
+
+* `SWITCH:{off|on}`: turn the fan OFF or ON  [required]
+
+**Options**:
+
+* `--help`: Show this message and exit.
 
 ## Development
 
