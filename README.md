@@ -219,7 +219,8 @@ Before contributing code, please set up the pre-commit hooks to reduce errors an
 
 ## Tips & Tricks
 
-* You can [increase the I2C baudrate](https://luma-oled.readthedocs.io/en/latest/hardware.html#enabling-the-i2c-interface) from the default 100KHz to 400KHz by adding `dtparam=i2c_arm=on,i2c_baudrate=400000` to `/boot/config.txt` and then rebooting. This will allow you to run animations at a higher framerate, but it is not required for the default status display.
+* you can [increase the I2C baudrate](https://luma-oled.readthedocs.io/en/latest/hardware.html#enabling-the-i2c-interface) from the default 100KHz to 400KHz by adding `dtparam=i2c_arm=on,i2c_baudrate=400000` to `/boot/config.txt` and then rebooting. This will allow you to run animations at a higher framerate, but it is not required for the default status display.
+* `raspi-poe-mon` might leak memory when running for a long time on specific combinations of OS and Python interpreter. I was unable to debug this issue, because the leak goes away when you attach a profiler (stupid heisenbug). If you are affected, please try to upgrade to a newer Python version or set up a cron job to restart `raspi-poe-mon` once per day.
 
 ## Links
 
