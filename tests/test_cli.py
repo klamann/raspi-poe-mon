@@ -31,7 +31,7 @@ def test_version():
     assert __version__ in result.stdout
 
 
-@pytest.mark.parametrize("command", ["clear", "fan", "run"])
+@pytest.mark.parametrize("command", ["display", "fan", "run"])
 def test_command_help(command: str):
     result = runner.invoke(app, [command, "--help"])
     assert result.exit_code == 0
