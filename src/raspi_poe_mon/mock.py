@@ -10,11 +10,32 @@ from raspi_poe_mon.util import image_to_ascii
 logger = logging.getLogger('raspi_poe_mon')
 
 
-def monkeypatch():
-    """monkeypatch all real hardware so the mock version is used instead. restart to undo"""
-    serial.i2c = MockFan
-    device.ssd1306 = MockDisplay
-    render.canvas = MockCanvas
+class HardwarePatcher:
+    """allows to monkeypatch all real hardware so the mock versions are used instead"""
+
+    real_i2c = serial.i2c
+    real_ssd1306 = device.ssd1306
+    real_canvas = render.canvas
+
+    @classmethod
+    def patch(cls):
+        serial.i2c = MockFan
+        device.ssd1306 = MockDisplay
+        render.canvas = MockCanvas
+
+    @classmethod
+    def restore(cls):
+        serial.i2c = cls.real_i2c
+        device.ssd1306 = cls.real_ssd1306
+        render.canvas = cls.real_canvas
+
+    @classmethod
+    def is_real(cls) -> bool:
+        return (
+            serial.i2c == cls.real_i2c
+            and device.ssd1306 == cls.real_ssd1306
+            and render.canvas == cls.real_canvas
+        )
 
 
 class MockDisplay:

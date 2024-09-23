@@ -4,6 +4,7 @@ from typer.testing import CliRunner
 
 from raspi_poe_mon import main
 from raspi_poe_mon.main import app
+from raspi_poe_mon.mock import HardwarePatcher
 from raspi_poe_mon.version import __version__
 
 runner = CliRunner()
@@ -43,9 +44,13 @@ def validate_help(result: Result, contains: str):
 
 @pytest.mark.timeout(2)
 def test_dry_run():
+    assert HardwarePatcher.is_real()
     main.run(dry_run=True, verbose=True, frame_time=0.02, timeout=0.05)
+    assert HardwarePatcher.is_real()
 
 
 @pytest.mark.timeout(2)
 def test_profiling():
+    assert HardwarePatcher.is_real()
     main.run(dry_run=True, profiling=True, frame_time=0.05, timeout=0.1)
+    assert HardwarePatcher.is_real()

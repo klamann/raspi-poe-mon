@@ -6,7 +6,7 @@ from luma.core.interface import serial
 from luma.oled import device
 from PIL.ImageDraw import ImageDraw
 
-from raspi_poe_mon import mock
+from raspi_poe_mon.mock import HardwarePatcher
 
 
 class PoeHat:
@@ -25,7 +25,7 @@ class PoeHat:
         self.display: Optional[device.ssd1306] = None
         self.fan_state = False
         if self.dry_run:
-            mock.monkeypatch()
+            HardwarePatcher.patch()
 
     def fan_connect(self, force=False):
         if force or self.i2c_fan is None:
@@ -69,3 +69,5 @@ class PoeHat:
     def cleanup(self):
         self.fan_off()
         self.display_clear()
+        if self.dry_run:
+            HardwarePatcher.restore()
