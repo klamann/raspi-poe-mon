@@ -69,7 +69,6 @@ The light output of pixels in OLED displays generally decreases over time when u
 After a year, the display can look like this (all pixels were set to 100% brightness for this effect):
 
 ![](https://raw.githubusercontent.com/klamann/raspi-poe-mon/main/docs/oled-burn-in.webp)
-![](./docs/oled-burn-in.webp)
 
 *Can you guess my local IP address?*
 
