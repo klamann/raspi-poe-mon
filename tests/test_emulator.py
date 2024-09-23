@@ -1,6 +1,8 @@
+import os
+
 from luma.emulator.device import capture
 
-from raspi_poe_mon.ip import IpDisplay
+from raspi_poe_mon.monitor import SystemMonitor
 from raspi_poe_mon.poe_hat import PoeHat
 from tests import root_dir
 
@@ -20,8 +22,9 @@ def test_draw_emulated_image():
     poe_hat.display = emulator
     poe_hat.display_connect = lambda force=False: None
     # draw a frame using the emulator
-    ip_display = IpDisplay(poe_hat)
-    ip_display.draw_frame()
+    renderer = SystemMonitor(poe_hat)
+    renderer.draw_frame()
+    print(f"files in {data_dir}: {os.listdir(data_dir)}")
     screenshot = data_dir / 'luma_000001.png'
     assert screenshot.exists()
     assert screenshot.stat().st_size > 0

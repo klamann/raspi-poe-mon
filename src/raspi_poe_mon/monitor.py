@@ -10,7 +10,10 @@ from raspi_poe_mon.poe_hat import PoeHat
 logger = logging.getLogger('raspi_poe_mon')
 
 
-class IpDisplay:
+class SystemMonitor:
+    """
+    Render display frames that show status information about the system
+    """
 
     def __init__(self, poe_hat: PoeHat) -> None:
         self.poe_hat = poe_hat
@@ -63,7 +66,7 @@ class IpDisplay:
             draw.text((109, 26), "DISK", font=self.font_5px, fill=1)
 
     @classmethod
-    def format_number(cls, num: float, draw: ImageDraw, font: FreeTypeFont) -> tuple[str, int]:
+    def format_number(cls, num: float, draw: ImageDraw, font: FreeTypeFont) -> tuple[str, float]:
         num_f = f"{num:.1f}" if num < 100 else f"{num:.0f}"
         length = draw.textlength(num_f, font=font)
         return num_f, length

@@ -4,7 +4,7 @@ import time
 import tracemalloc
 
 from raspi_poe_mon import util
-from raspi_poe_mon.ip import IpDisplay
+from raspi_poe_mon.monitor import SystemMonitor
 from raspi_poe_mon.poe_hat import PoeHat
 
 logger = logging.getLogger('raspi_poe_mon')
@@ -34,7 +34,7 @@ class Controller:
         self.timeout = timeout
         self.profiling = profiling
         self.poe_hat = PoeHat(dry_run=dry_run, brightness=brightness)
-        self.display = IpDisplay(self.poe_hat)
+        self.renderer = SystemMonitor(self.poe_hat)
         self._frame_counter = 0
         self._start_time = time.time()
         self._terminate = False
@@ -81,7 +81,7 @@ class Controller:
 
     def update_display(self):
         if self.show_display:
-            self.display.draw_frame()
+            self.renderer.draw_frame()
 
     def add_signal_handlers(self):
         try:
