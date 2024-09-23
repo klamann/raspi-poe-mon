@@ -118,11 +118,31 @@ def fan(
 
 
 @app.command()
-def clear():
+def display(
+    switch: Annotated[
+        Switch, typer.Argument(case_sensitive=False, help="turn the display OFF or ON")
+    ]
+):
     """
-    clear the display and turn it off
+    turn the display of the PoE HAT on or off (on means all white, useful to detect pixel failures)
+
+    turning the display OFF with this command should usually not be necessary, since raspi-poe-mon
+    will always turn off the display when it terminates. But if your display is stuck in the 'on'
+    state for some reason, you can explicitly turn it off with this command.
+
+    turning the display ON will not show any information, but it will light up all pixels, which
+    can be useful to detect pixel failures. Unfortunately, pixel burn-in is a known issue with
+    these cheap OLED displays.
     """
-    PoeHat().display_clear()
+    poe_hat = PoeHat()
+    if switch == Switch.off:
+        poe_hat.display_clear()
+    elif switch == Switch.on:
+        poe_hat.display_white()
+        typer.pause("press any key to turn off the display again...")
+        poe_hat.display_clear()
+    else:
+        raise ValueError(f"unexpected value {switch=}")
 
 
 @app.command()

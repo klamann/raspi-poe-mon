@@ -32,6 +32,11 @@ class PoeHat:
             self.display = device.ssd1306(serial_interface=self.i2c_display, width=128, height=32)
             self.display.contrast(int(255 * self.brightness / 100))
 
+    def display_white(self):
+        self.display_connect()
+        with self.draw() as draw:
+            draw.rectangle([(0, 0), (128, 32)], fill=1)
+
     def display_clear(self):
         self.display_connect()
         self.display.cleanup()
