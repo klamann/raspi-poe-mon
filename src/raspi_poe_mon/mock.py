@@ -28,6 +28,9 @@ class MockDisplay:
     def cleanup(self):
         return
 
+    def contrast(self, *args, **kwargs):
+        return
+
 
 class MockFan:
     """replacement for i2c fan in dry run mode"""
