@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "raspi-poe-mon"
-version = "1.0.0b2"
+version = "1.0.0"
 description = "A controller for the display and fan of the Raspberry Pi Power Over Ethernet HAT (Type B), compatible with Raspberry Pi 3B+/4B"
 readme = "README.md"
 authors = ["Sebastian Straub <sstraub@posteo.de>"]
