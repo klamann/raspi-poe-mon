@@ -11,6 +11,7 @@ logger = logging.getLogger('raspi_poe_mon')
 
 
 def monkeypatch():
+    """monkeypatch all real hardware so the mock version is used instead. restart to undo"""
     serial.i2c = MockFan
     device.ssd1306 = MockDisplay
     render.canvas = MockCanvas

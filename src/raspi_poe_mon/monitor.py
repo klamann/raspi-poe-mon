@@ -13,6 +13,8 @@ logger = logging.getLogger('raspi_poe_mon')
 class SystemMonitor:
     """
     Render display frames that show status information about the system
+
+    :param poe_hat: Instance of the PoeHat class with access to the display
     """
 
     def __init__(self, poe_hat: PoeHat) -> None:

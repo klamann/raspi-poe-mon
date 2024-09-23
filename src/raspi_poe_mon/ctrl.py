@@ -11,6 +11,23 @@ logger = logging.getLogger('raspi_poe_mon')
 
 
 class Controller:
+    """
+    Controller for display and fan of the PoE HAT.
+
+    Contains the main application loop and manages all high level logic like updating display
+    frames or changing fan state.
+
+    :param show_display: display will only be used when this is True
+    :param control_fan: fan controls will only be enabled when this is True
+    :param fan_on_temp: turn on the fan when CPU temperature rises above this value (in °C)
+    :param fan_off_temp: turn off the fan when CPU temperature drops below this value (in °C)
+    :param frame_time: show a new frame on the display every n seconds (excluding blank time)
+    :param blank_time: blank time (seconds) between frames where the display is turned off
+    :param brightness: brightness level of the display in percent (0-100)
+    :param timeout: terminate after n seconds; 0 means run until interrupted
+    :param dry_run: simulate commands without accessing the PoE HAT
+    :param profiling: log profiling information, very verbose
+    """
 
     def __init__(
         self,

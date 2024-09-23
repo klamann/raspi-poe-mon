@@ -10,6 +10,12 @@ from raspi_poe_mon import mock
 
 
 class PoeHat:
+    """
+    Get access to the PoE HAT hardware, specifically display and fan via I2C
+
+    :param dry_run: do not access the real hardware when this is set to True
+    :param brightness: brightness level of the OLED display (0-100%)
+    """
 
     def __init__(self, dry_run=False, brightness=100) -> None:
         self.dry_run = dry_run

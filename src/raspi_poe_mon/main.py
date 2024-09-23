@@ -64,7 +64,7 @@ def run(
     ] = 2.0,
     blank_time: Annotated[
         float,
-        typer.Option(help="bank time (seconds) between frames where the display is turned off")
+        typer.Option(help="blank time (seconds) between frames where the display is turned off")
     ] = 0.0,
     brightness: Annotated[
         int,
