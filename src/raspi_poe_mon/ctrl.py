@@ -21,6 +21,7 @@ class Controller:
         frame_time=2.0,
         blank_time=0,
         brightness=100,
+        timeout=0,
         dry_run=False,
         profiling=False,
     ):
@@ -30,34 +31,43 @@ class Controller:
         self.fan_off_temp = fan_off_temp
         self.frame_time = frame_time
         self.blank_time = blank_time
+        self.timeout = timeout
         self.profiling = profiling
         self.poe_hat = PoeHat(dry_run=dry_run, brightness=brightness)
         self.display = IpDisplay(self.poe_hat)
         self._frame_counter = 0
+        self._start_time = time.time()
         self._terminate = False
         self.add_signal_handlers()
         self.profiling_setup()
 
     def main_loop(self):
         try:
-            while not self._terminate:
+            while not self.should_terminate():
                 frame_start = time.time()
                 self.before_frame()
                 self.update_fan()
                 self.update_display()
                 self.after_frame()
-                if self._terminate:
-                    break
-                sleep_time = self.frame_time - (time.time() - frame_start)
-                logger.debug(f"update complete, sleeping for {sleep_time:.3f} s")
-                if sleep_time > 0:
-                    time.sleep(sleep_time)
+                self.frame_idle(frame_start)
                 self.screen_blank()
         except KeyboardInterrupt:
             pass
         finally:
             logger.info("shutting down")
             self.poe_hat.cleanup()
+
+    def should_terminate(self):
+        return (
+            self._terminate
+            or (self.timeout and time.time() - self._start_time >= self.timeout)
+        )
+
+    def frame_idle(self, frame_start: float):
+        sleep_time = self.frame_time - (time.time() - frame_start)
+        logger.debug(f"update complete, sleeping for {sleep_time:.3f} s")
+        if sleep_time > 0:
+            time.sleep(sleep_time)
 
     def update_fan(self):
         if self.control_fan:

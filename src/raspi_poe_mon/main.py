@@ -70,6 +70,10 @@ def run(
         int,
         typer.Option(min=0, max=100, help="brightness level of the display in percent")
     ] = 50,
+    timeout: Annotated[
+        float,
+        typer.Option(min=0, help="terminate after n seconds; 0 means run until interrupted")
+    ] = 0.0,
     show_display: Annotated[
         bool,
         typer.Option('--display/--no-display', help="show system information on the display")
@@ -108,6 +112,7 @@ def run(
         frame_time=frame_time,
         blank_time=blank_time,
         brightness=brightness,
+        timeout=timeout,
         dry_run=dry_run,
         profiling=profiling,
     )
