@@ -20,6 +20,7 @@ include = ["src/raspi_poe_mon/res/*"]
 
 [tool.poetry.scripts]
 raspi-poe-mon = "raspi_poe_mon.main:app"
+# generate docs with `typer raspi_poe_mon.main utils docs`
 
 [tool.poetry.dependencies]
 python = "^3.9"
@@ -31,6 +32,7 @@ psutil = "^6.0.0"
 [tool.poetry.group.test.dependencies]
 pytest = "^8.3"
 pytest-cov = "^5.0"
+pytest-timeout = "^2.3.1"
 luma-emulator = "^1.5.0"
 
 [tool.poetry.group.dev.dependencies]
