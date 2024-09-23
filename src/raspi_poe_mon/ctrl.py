@@ -14,6 +14,8 @@ class Controller:
 
     def __init__(
         self,
+        show_display=True,
+        control_fan=True,
         fan_on_temp=60.0,
         fan_off_temp=50.0,
         frame_time=2.0,
@@ -22,6 +24,8 @@ class Controller:
         dry_run=False,
         profiling=False,
     ):
+        self.show_display = show_display
+        self.control_fan = control_fan
         self.fan_on_temp = fan_on_temp
         self.fan_off_temp = fan_off_temp
         self.frame_time = frame_time
@@ -40,9 +44,8 @@ class Controller:
                 frame_start = time.time()
                 self.before_frame()
                 self.update_fan()
-                self.display.draw_frame()
+                self.update_display()
                 self.after_frame()
-                self._frame_counter += 1
                 if self._terminate:
                     break
                 sleep_time = self.frame_time - (time.time() - frame_start)
@@ -57,13 +60,18 @@ class Controller:
             self.poe_hat.cleanup()
 
     def update_fan(self):
-        temp = util.get_cpu_temp()
-        if not self.poe_hat.is_fan_on() and temp > self.fan_on_temp:
-            logger.info(f"CPU temperature at {temp}, turning fan ON")
-            self.poe_hat.fan_on()
-        elif self.poe_hat.is_fan_on() and temp < self.fan_off_temp:
-            logger.info(f"CPU temperature at {temp}, turning fan OFF")
-            self.poe_hat.fan_off()
+        if self.control_fan:
+            temp = util.get_cpu_temp()
+            if not self.poe_hat.is_fan_on() and temp > self.fan_on_temp:
+                logger.info(f"CPU temperature at {temp}, turning fan ON")
+                self.poe_hat.fan_on()
+            elif self.poe_hat.is_fan_on() and temp < self.fan_off_temp:
+                logger.info(f"CPU temperature at {temp}, turning fan OFF")
+                self.poe_hat.fan_off()
+
+    def update_display(self):
+        if self.show_display:
+            self.display.draw_frame()
 
     def add_signal_handlers(self):
         try:
@@ -86,6 +94,7 @@ class Controller:
         pass
 
     def after_frame(self):
+        self._frame_counter += 1
         if (
             self.profiling
             and self._frame_counter > 0

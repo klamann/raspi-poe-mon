@@ -70,17 +70,25 @@ def run(
         int,
         typer.Option(min=0, max=100, help="brightness level of the display in percent")
     ] = 50,
+    show_display: Annotated[
+        bool,
+        typer.Option('--display/--no-display', help="show system information on the display")
+    ] = True,
+    control_fan: Annotated[
+        bool,
+        typer.Option('--fan/--no-fan', help="control fan speed based on temperature")
+    ] = True,
     verbose: Annotated[
         bool,
-        typer.Option(help="log detailed status information")
+        typer.Option('--verbose', help="log detailed status information")
     ] = False,
-    dry: Annotated[
+    dry_run: Annotated[
         bool,
-        typer.Option(help="dry run - simulate commands without accessing the PoE HAT")
+        typer.Option('--dry', help="dry run - simulate commands without accessing the PoE HAT")
     ] = False,
     profiling: Annotated[
         bool,
-        typer.Option(help="log profiling information, very verbose")
+        typer.Option('--profiling', help="log profiling information, very verbose")
     ] = False,
 ):
     """
@@ -93,12 +101,14 @@ def run(
     logging.basicConfig(level=log_level, format="%(asctime)s [%(levelname)s]: %(message)s")
     logger.info(f"Starting Raspi PoE HAT Monitor, version {__version__}")
     ctrl = Controller(
+        show_display=show_display,
+        control_fan=control_fan,
         fan_on_temp=fan_on_temp,
         fan_off_temp=fan_off_temp,
         frame_time=frame_time,
         blank_time=blank_time,
         brightness=brightness,
-        dry_run=dry,
+        dry_run=dry_run,
         profiling=profiling,
     )
     ctrl.main_loop()
