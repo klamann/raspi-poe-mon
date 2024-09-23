@@ -1,3 +1,4 @@
+import logging
 import os
 
 from luma.emulator.device import capture
@@ -5,6 +6,8 @@ from luma.emulator.device import capture
 from raspi_poe_mon.monitor import SystemMonitor
 from raspi_poe_mon.poe_hat import PoeHat
 from tests import root_dir
+
+logger = logging.getLogger('raspi_poe_mon')
 
 
 def test_draw_emulated_image():
@@ -24,7 +27,7 @@ def test_draw_emulated_image():
     # draw a frame using the emulator
     renderer = SystemMonitor(poe_hat)
     renderer.draw_frame()
-    print(f"files in {data_dir}: {os.listdir(data_dir)}")
+    logger.debug(f"files in {data_dir}: {os.listdir(data_dir)}")
     screenshot = data_dir / 'luma_000001.png'
     assert screenshot.exists()
     assert screenshot.stat().st_size > 0
