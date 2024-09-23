@@ -17,6 +17,7 @@ class Controller:
         fan_on_temp=60.0,
         fan_off_temp=50.0,
         frame_time=2.0,
+        blank_time=0,
         brightness=100,
         dry_run=False,
         profiling=False,
@@ -24,6 +25,7 @@ class Controller:
         self.fan_on_temp = fan_on_temp
         self.fan_off_temp = fan_off_temp
         self.frame_time = frame_time
+        self.blank_time = blank_time
         self.profiling = profiling
         self.poe_hat = PoeHat(dry_run=dry_run, brightness=brightness)
         self.display = IpDisplay(self.poe_hat)
@@ -44,9 +46,10 @@ class Controller:
                 if self._terminate:
                     break
                 sleep_time = self.frame_time - (time.time() - frame_start)
-                logger.debug(f"update complete, sleeping for {sleep_time:.3f}")
+                logger.debug(f"update complete, sleeping for {sleep_time:.3f} s")
                 if sleep_time > 0:
                     time.sleep(sleep_time)
+                self.screen_blank()
         except KeyboardInterrupt:
             pass
         finally:
@@ -83,7 +86,6 @@ class Controller:
         pass
 
     def after_frame(self):
-        # when profiling is active, print stats
         if (
             self.profiling
             and self._frame_counter > 0
@@ -108,3 +110,10 @@ class Controller:
             )
             self._last_snapshot = snapshot
             self._last_snapshot_time = time.time()
+
+    def screen_blank(self):
+        if self.blank_time > 0:
+            logger.debug(f"screen blank for {self.blank_time:.1f} s")
+            self.poe_hat.display.hide()
+            time.sleep(self.blank_time)
+            self.poe_hat.display.show()

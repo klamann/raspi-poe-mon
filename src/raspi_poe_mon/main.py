@@ -60,8 +60,12 @@ def run(
     ] = 50,
     frame_time: Annotated[
         float,
-        typer.Option(help="update the display every n seconds")
+        typer.Option(help="show a new frame on the display every n seconds (excluding blank time)")
     ] = 2.0,
+    blank_time: Annotated[
+        float,
+        typer.Option(help="bank time (seconds) between frames where the display is turned off")
+    ] = 0.0,
     brightness: Annotated[
         int,
         typer.Option(min=0, max=100, help="brightness level of the display in percent")
@@ -92,6 +96,7 @@ def run(
         fan_on_temp=fan_on_temp,
         fan_off_temp=fan_off_temp,
         frame_time=frame_time,
+        blank_time=blank_time,
         brightness=brightness,
         dry_run=dry,
         profiling=profiling,
