@@ -12,6 +12,8 @@ A controller for the display and fan of the Raspberry Pi Power Over Ethernet HAT
 
 The PoE HAT ([Waveshare SKU 18014](https://www.waveshare.com/wiki/PoE_HAT_(B))) allows you to deliver gigabit ethernet connectivity and power supply to your Raspi using a single connection (if you have a PoE capable switch/router). While PoE works without additional drivers, there is also a fan and a 128x32 pixel monochrome display on the HAT, both of which can be controlled with this software.
 
+Warning: The OLED display is susceptible to burn-in, pixel brightness will deteriorate over time - refer to section [Handling OLED burn-in](#handling-oled-burn-in) for more information.
+
 ## Features
 
 * automatic fan control to reach your desired temperature target
@@ -56,9 +58,32 @@ If you are using Python 3.11 or higher, you may be greeted by `error: externally
 ### Troubleshooting
 
 * the `raspi-poe-mon` command is not available after installation? Make sure that `$HOME/.local/bin` is on your `PATH`! On Raspi OS, this is already the case, but when this folder was just created, you might have to open a new terminal session first.
-* If you try to install Python packages via pip on Raspberry Pi OS, you may get stuck due to [issues with gnome-keyring](https://github.com/pypa/pip/issues/7883). If this is the case, please `export PYTHON_KEYRING_BACKEND=keyring.backends.null.Keyring` and try again. You may want to add this to your `.profile` if the issue persists.
+* if you try to install Python packages via pip on Raspberry Pi OS, you may get stuck due to [issues with gnome-keyring](https://github.com/pypa/pip/issues/7883). If this is the case, please `export PYTHON_KEYRING_BACKEND=keyring.backends.null.Keyring` and try again. You may want to add this to your `.profile` if the issue persists.
 * `pip install raspi-poe-mon` is still hangig or really slow? I can confirm that sometimes, downloading packages from PyPI on Raspi OS can take quite a while and I have no idea why... Try `pip install raspi-poe-mon -vvv` to get some status info and let it do it's thing for a couple of minutes.
 * the `pip` command is not available, even after installing `python3-pip`? try `pip3` instead.
+
+### Handling OLED burn-in
+
+The light output of pixels in OLED displays generally decreases over time when used. Modern OLED panels in TVs and computer monitors can compensate for this kind of degradation, but the cheap monochrome display that comes with the PoE HAT does not. If usage patterns on displays are unevenly distributed, you can see pixels that are weaker than others, and over time ghost images may appear.
+
+After a year, the display can look like this (all pixels were set to 100% brightness for this effect):
+
+![](https://raw.githubusercontent.com/klamann/raspi-poe-mon/main/docs/oled-burn-in.webp)
+![](./docs/oled-burn-in.webp)
+
+*Can you guess my local IP address?*
+
+With this display model, there's not much we can do to slow this process, except *not* using the display. [This video](https://youtu.be/GWOFF5tMv_A?t=670) shows the burn-in effect for monochrome OLED displays over the duration of a year.
+
+The good news is: The OLED display usually does not break, even when lots of pixels are affected by burn-in. The bad news: We can't control the voltage for individual pixels and things like screensavers don't work for the kind of panel we're dealing with.
+
+So what can we do?
+
+* decrease display brightness. With the `--brightness` flag, we can set the brightness level from 0 to 100%, the default is 50%. The 100% setting is probably more than you need when indoors; try to find the optimal setting for your environment.
+* only turn the display on every so often. Use the `--frame-time` and `--blank-time` parameters to do so, e.g. `--frame-time 5 --blank-time 10` will turn on the display for 5 seconds and then turn it off for 10 seconds.
+* turn off the display when you don't need it with the `--no-display` flag. Of course, doing this manually would be impractical, but you can set up cron jobs in combination with the `--timeout` flag to schedule times when the display is on.
+
+None of these options are a silver bullet and some may be too annoying for you to consider, but that's all I was able to come up with to improve the lifetime of these displays. If all else fails, you can buy a compatible OLED display and replace the one affected by burn-in. Any monochrome I2C display with 128x32 pixels should work, some soldering might be required.
 
 ## User Guide
 
