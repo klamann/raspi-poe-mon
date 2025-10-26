@@ -3,6 +3,7 @@ from enum import Enum
 from typing import Annotated, Optional
 
 import typer
+from luma.core.error import DeviceNotFoundError
 
 from raspi_poe_mon import __title__, __version__
 from raspi_poe_mon.ctrl import Controller
@@ -116,7 +117,13 @@ def run(
         dry_run=dry_run,
         profiling=profiling,
     )
-    ctrl.main_loop()
+    try:
+        ctrl.main_loop()
+    except DeviceNotFoundError as e:
+        logger.error(
+            f"PoE HAT not detected. Please check with 'raspi-config' if I2C is enabled. "
+            f"Error details: {e}"
+        )
 
 
 @app.command()
