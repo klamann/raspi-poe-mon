@@ -23,17 +23,18 @@ Warning: The OLED display is susceptible to burn-in, pixel brightness will deter
 
 ## Getting Started
 
-If you are running the latest [Raspberry Pi OS](https://www.raspberrypi.com/software/), everything should already be set up the way we need it and you can run
+The easiest way to install raspi-poe-mon on [Raspberry Pi OS](https://www.raspberrypi.com/software/) and many other distributions is with [pipx](https://pipx.pypa.io/stable/):
 
-    pip install raspi-poe-mon --break-system-packages
-
-If pip is not available, please install it with `sudo apt install python3-pip`. The scary `--break-system-packages` flag just tells Python that you want to install this package globally rather than in a virtualenv. I don't agree with the framing here, in my opinion it's fine to install Python packages globally on your Raspi.
+    sudo apt install pipx
+    pipx install raspi-poe-mon
 
 After installation finished, you can call
 
     raspi-poe-mon run
 
 and the OLED disply should show you some info. Learn more about the available options with `raspi-poe-mon --help`. Each command has its own help section, e.g. `raspi-poe-mon run --help`.
+
+You can upgrade raspi-poe-mon to the latest version with `pipx upgrade raspi-poe-mon` and remove it with `pipx uninstall raspi-poe-mon`. If you had previously installed raspi-poe-mon with pip, you can uninstall that version with `pip uninstall raspi-poe-mon --break-system-packages`.
 
 ### Install Guide
 
