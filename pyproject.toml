@@ -24,7 +24,8 @@ raspi-poe-mon = "raspi_poe_mon.main:app"
 
 [tool.poetry.dependencies]
 python = "^3.9"
-typer = {extras = ["all"], version = "^0.12.3"}
+typer = {version = "~0.20.0"}
+click = {version = "~8.1.0"}
 luma-oled = "^3.12"
 pillow = "^10.4"
 psutil = "^6.0.0"
