@@ -26,12 +26,11 @@ jobs:
         cpu_info: cpuinfo/raspberrypi_4b
         commands: |
           uname -a
-          grep Model /proc/cpuinfo
+          grep /proc/cpuinfo
           df -h
           sudo apt-get update
           sudo apt-get install -y python3 python3-pip
           sudo apt-get -y clean autoremove
           pip install poetry --break-system-packages
-          df -h
           poetry install
           poetry run pytest
