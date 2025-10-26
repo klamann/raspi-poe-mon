@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "raspi-poe-mon"
-version = "1.0.0"
+version = "1.1.0"
 description = "A controller for the display and fan of the Raspberry Pi Power Over Ethernet HAT (Type B), compatible with Raspberry Pi 3B+/4B"
 readme = "README.md"
 authors = ["Sebastian Straub <sstraub@posteo.de>"]
@@ -11,7 +11,7 @@ keywords = ["raspberry-pi", "oled-display", "monitoring", "waveshare", "power-ov
 classifiers = [
     # Full list: https://pypi.python.org/pypi?%3Aaction=list_classifiers
     "License :: OSI Approved :: MIT License",
-    "Development Status :: 4 - Beta",
+    "Development Status :: 5 - Production/Stable",
     "Programming Language :: Python :: 3",
 ]
 
