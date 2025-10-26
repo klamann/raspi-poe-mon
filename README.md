@@ -27,7 +27,7 @@ If you are running the latest [Raspberry Pi OS](https://www.raspberrypi.com/soft
 
     pip install raspi-poe-mon --break-system-packages
 
-The scary `--break-system-packages` flag just tells Python that you want to install this package globally rather than in a virtualenv. I don't agree with the framing here, in my opinion it's fine to install Python packages globally on your Raspi.
+If pip is not available, please install it with `sudo apt install python3-pip`. The scary `--break-system-packages` flag just tells Python that you want to install this package globally rather than in a virtualenv. I don't agree with the framing here, in my opinion it's fine to install Python packages globally on your Raspi.
 
 After installation finished, you can call
 
@@ -47,7 +47,9 @@ or call `raspi-config` without params and use the menu (`Interface Options` -> `
 
 Next we install required packages: Python and pip are needed; the remaining packages are dependencies of the Pillow graphics library.
 
-    sudo apt install python3 python3-pip libjpeg-dev zlib1g-dev libfreetype6-dev liblcms2-dev libopenjp2-7 libtiff5 libsdl2-image-2.0-0
+    sudo apt install python3 python3-pip libjpeg-dev zlib1g-dev libfreetype6-dev liblcms2-dev libopenjp2-7 libsdl2-image-2.0-0
+
+Other libraries that might be relevant to you (depending on your OS): `libtiff5`
 
 Now we are ready to install `raspi-poe-mon` from PyPI:
 
@@ -96,7 +98,7 @@ To activate the display and fan controller, use
 
 This will show live system information and control the fan on the PoE HAT based on chip temperature. Each command has its own help section that lists all avilable options, e.g. `raspi-poe-mon run --help`. This will tell you how to change the fan controller settings
 
-    raspi-poe-mon run --fan-off-temp 50 --fan-on-temp 60 --brightness 80
+    raspi-poe-mon run --fan-off-temp 50 --fan-on-temp 60 --brightness 50
 
 With this setting, the fan will turn on when the CPU reaches 60°C and turn off after it has cooled down to 50°C. The display's brightness level is set to 80%.
 
@@ -110,7 +112,7 @@ Description=Raspi PoE HAT Monitor
 After=network.target
 
 [Service]
-ExecStart=/home/raspi/.local/bin/raspi-poe-mon run --fan-off-temp 50 --fan-on-temp 60
+ExecStart=/home/raspi/.local/bin/raspi-poe-mon run --fan-off-temp 50 --fan-on-temp 60 --brightness 50
 User=raspi
 Restart=always
 RestartSec=30
